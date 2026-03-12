@@ -90,7 +90,7 @@ class _MainShellState extends State<MainShell> {
                   ),
                 ),
                 _NavBtn(icon: Icons.bookmark_outline_rounded, activeIcon: Icons.bookmark_rounded,
-                  label: 'Saved', active: false, onTap: () => setState(() => _i = 1)),
+                  label: 'Saved', active: _i == 1, onTap: () => setState(() => _i = 1)),
                 _NavBtn(icon: Icons.bar_chart_outlined, activeIcon: Icons.bar_chart_rounded,
                   label: 'Wellbeing', active: _i == 2, onTap: () => setState(() => _i = 2)),
               ],

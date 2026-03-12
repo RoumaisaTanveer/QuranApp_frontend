@@ -32,7 +32,10 @@ class _SplashScreenState extends State<SplashScreen>
       switchOutCurve: Curves.easeOut,
       child: _done
           ? KeyedSubtree(key: const ValueKey('app'), child: widget.child)
-          : const KeyedSubtree(key: ValueKey('splash'), child: _SplashContent()),
+          : const KeyedSubtree(
+              key: ValueKey('splash'),
+              child: _SplashContent(),
+            ),
     );
   }
 }
@@ -46,47 +49,67 @@ class _SplashContent extends StatelessWidget {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // Background purple glow
+          // Background glow: green core with subtle purple edge
           Center(
             child: Container(
-              width: 300, height: 300,
+              width: 300,
+              height: 300,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                gradient: RadialGradient(colors: [
-                  AppColors.purple.withOpacity(0.15),
-                  Colors.transparent,
-                ]),
+                gradient: RadialGradient(
+                  colors: [
+                    AppColors.green.withOpacity(0.22),
+                    AppColors.purple.withOpacity(0.05),
+                    Colors.transparent,
+                  ],
+                  stops: const [0.0, 0.55, 1.0],
+                ),
               ),
             ),
-          ).animate().scale(
-            begin: const Offset(0.5, 0.5),
-            end: const Offset(1.5, 1.5),
-            duration: 2800.ms,
-            curve: Curves.easeOut,
-          ),
+          )
+              .animate()
+              .scale(
+                begin: const Offset(0.5, 0.5),
+                end: const Offset(1.5, 1.5),
+                duration: 2800.ms,
+                curve: Curves.easeOut,
+              ),
 
           // Main content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Glowing orb icon
+                // Glowing orb icon – green with gold rim, soft purple glow
                 Container(
-                  width: 90, height: 90,
+                  width: 90,
+                  height: 90,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: const LinearGradient(
-                      colors: [AppColors.purple, Color(0xFF5B3CC4)],
+                      colors: [
+                        AppColors.greenSoft,
+                        AppColors.green,
+                      ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.purpleGlow,
+                        color: AppColors.greenGlow,
                         blurRadius: 40,
                         spreadRadius: 5,
                       ),
+                      BoxShadow(
+                        color: AppColors.purpleGlow,
+                        blurRadius: 60,
+                        spreadRadius: -5,
+                      ),
                     ],
+                    border: Border.all(
+                      color: AppColors.gold.withOpacity(0.65),
+                      width: 1.4,
+                    ),
                   ),
                   child: const Icon(
                     Icons.menu_book_rounded,
@@ -94,26 +117,34 @@ class _SplashContent extends StatelessWidget {
                     size: 38,
                   ),
                 )
-                .animate()
-                .scale(
-                  begin: const Offset(0.4, 0.4),
-                  end: const Offset(1.0, 1.0),
-                  duration: 700.ms,
-                  curve: Curves.elasticOut,
-                )
-                .fadeIn(duration: 400.ms),
+                    .animate()
+                    .scale(
+                      begin: const Offset(0.4, 0.4),
+                      end: const Offset(1.0, 1.0),
+                      duration: 700.ms,
+                      curve: Curves.elasticOut,
+                    )
+                    .fadeIn(duration: 400.ms),
 
                 const SizedBox(height: 32),
 
-                // Arabic title
+                // Arabic title (gold, as before)
                 Text(
                   'مع القرآن',
                   textDirection: TextDirection.rtl,
-                  style: AppText.arabic(size: 38, color: AppColors.goldLight),
+                  style: AppText.arabic(
+                    size: 38,
+                    color: AppColors.goldLight,
+                  ),
                 )
-                .animate()
-                .fadeIn(delay: 500.ms, duration: 600.ms)
-                .slideY(begin: 0.2, end: 0, delay: 500.ms, duration: 600.ms),
+                    .animate()
+                    .fadeIn(delay: 500.ms, duration: 600.ms)
+                    .slideY(
+                      begin: 0.2,
+                      end: 0,
+                      delay: 500.ms,
+                      duration: 600.ms,
+                    ),
 
                 const SizedBox(height: 8),
 
@@ -125,16 +156,14 @@ class _SplashContent extends StatelessWidget {
                     color: AppColors.textSub,
                     weight: FontWeight.w300,
                   ),
-                )
-                .animate()
-                .fadeIn(delay: 700.ms, duration: 600.ms),
+                ).animate().fadeIn(delay: 700.ms, duration: 600.ms),
 
                 const SizedBox(height: 60),
 
-                // Loading dots
+                // Loading dots – use purple for continuity with rest of app
                 _PulseDots()
-                .animate()
-                .fadeIn(delay: 1000.ms, duration: 400.ms),
+                    .animate()
+                    .fadeIn(delay: 1000.ms, duration: 400.ms),
               ],
             ),
           ),
@@ -142,7 +171,8 @@ class _SplashContent extends StatelessWidget {
           // Bottom tagline
           Positioned(
             bottom: 48,
-            left: 0, right: 0,
+            left: 0,
+            right: 0,
             child: Text(
               'أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ',
               textAlign: TextAlign.center,
@@ -152,8 +182,8 @@ class _SplashContent extends StatelessWidget {
                 color: AppColors.textMuted,
               ),
             )
-            .animate()
-            .fadeIn(delay: 900.ms, duration: 800.ms),
+                .animate()
+                .fadeIn(delay: 900.ms, duration: 800.ms),
           ),
         ],
       ),
@@ -180,24 +210,29 @@ class _PulseDotsState extends State<_PulseDots>
   }
 
   @override
-  void dispose() { _ctrl.dispose(); super.dispose(); }
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => AnimatedBuilder(
-    animation: _ctrl,
-    builder: (_, __) => Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: List.generate(3, (i) {
-        final o = (((_ctrl.value * 3) - i) % 1 + 1) % 1;
-        return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 5),
-          width: 6, height: 6,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.purple.withOpacity(0.2 + 0.8 * o),
-          ),
-        );
-      }),
-    ),
-  );
+        animation: _ctrl,
+        builder: (_, __) => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: List.generate(3, (i) {
+            final o = (((_ctrl.value * 3) - i) % 1 + 1) % 1;
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 5),
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                // still purple for subtle brand continuity
+                color: AppColors.purple.withOpacity(0.2 + 0.8 * o),
+              ),
+            );
+          }),
+        ),
+      );
 }
