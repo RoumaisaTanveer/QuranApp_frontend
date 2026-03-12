@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="مع القرآن — With the Quran">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="مع القرآن">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>مع القرآن</title>
+  <style>
+    body {
+      background-color: #070709;
+      margin: 0;
+      padding: 0;
+    }
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #c9a84c;
+      font-family: serif;
+      font-size: 1.5rem;
+      letter-spacing: 0.2em;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <script>
+    window.addEventListener('load', function(ev) {
+      document.getElementById('loading').style.display = 'none';
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>
