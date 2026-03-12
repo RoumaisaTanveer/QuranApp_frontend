@@ -7,11 +7,14 @@ import '../services/api_service.dart';
 import '../widgets/widgets.dart';
 
 class HistoryScreen extends StatefulWidget {
-  const HistoryScreen({super.key});
+  const HistoryScreen({super.key, this.initialTab = 0});
+
+  final int initialTab; // 0 = Entries, 1 = Saved Ayahs
 
   @override
   State<HistoryScreen> createState() => _HistoryScreenState();
 }
+
 
 class _HistoryScreenState extends State<HistoryScreen>
     with SingleTickerProviderStateMixin {
@@ -22,9 +25,11 @@ class _HistoryScreenState extends State<HistoryScreen>
 
   @override
   void initState() {
-    super.initState();
-    _tab = TabController(length: 2, vsync: this);
+   super.initState();
+  _tab = TabController(length: 2, vsync: this);
+  _tab.index = widget.initialTab.clamp(0, 1);
   }
+
 
   @override
   void didChangeDependencies() {

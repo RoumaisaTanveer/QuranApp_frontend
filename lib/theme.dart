@@ -1,19 +1,19 @@
-// lib/theme.dart
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Backgrounds – slightly more neutral
-  static const bg   = Color(0xFF13151A);
-  static const bg2  = Color(0xFF181A22);
-  static const bg3  = Color(0xFF1E2028);
-  static const bg4  = Color(0xFF242732);
-  static const card = Color(0xFF181A22);
+  // Backgrounds
+  static const bg   = Color(0xFF17171E);
+  static const bg2  = Color(0xFF1E1E28);
+  static const bg3  = Color(0xFF252530);
+  static const bg4  = Color(0xFF2C2C3A);
+  static const card = Color(0xFF1E1E28);
 
-  // Purple — toned down
-  static const purple      = Color(0xFF6A56C9);
-  static const purpleLight = Color(0xFF8B74D4);
-  static const purpleDim   = Color(0x226A56C9);
-  static const purpleGlow  = Color(0x556A56C9);
+  // Purple — slightly muted vs original
+  // (more “royal” and less neon)
+  static const purple      = Color(0xFF6F54D8); // was 0xFF7B5CF0
+  static const purpleLight = Color(0xFF9274E2); // was 0xFF9B7BCA
+  static const purpleDim   = Color(0x226F54D8);
+  static const purpleGlow  = Color(0x556F54D8);
 
   // Gold — spiritual accent
   static const gold      = Color(0xFFD4A84B);
@@ -21,54 +21,48 @@ class AppColors {
   static const goldDim   = Color(0x22D4A84B);
   static const goldGlow  = Color(0x44D4A84B);
 
-  // Green — main primary accent
-  static const green      = Color(0xFF1F6B4A);
-  static const greenSoft  = Color(0xFF2C815A);
-  static const greenDim   = Color(0x221F6B4A);
-  static const greenGlow  = Color(0x441F6B4A);
-
   // Semantic
   static const red    = Color(0xFFE84545);
   static const orange = Color(0xFFE8944A);
+  static const green  = Color(0xFF4FC87A);
   static const blue   = Color(0xFF4A90E2);
 
   // Text
-  static const text      = Color(0xFFEEEFF5);
-  static const textSub   = Color(0xFF9595A8);
-  static const textDim   = Color(0xFF80809A);
-  static const textMuted = Color(0xFF4C4C5A);
+  static const text      = Color(0xFFEEEEF5);
+  static const textSub   = Color(0xFF9090A8);
+  static const textDim   = Color(0xFF9090A8);
+  static const textMuted = Color(0xFF50505F);
 
   // Borders
-  static const border      = Color(0xFF2A2C39);
-  static const borderLight = Color(0xFF353749);
-  static const borderMid   = Color(0xFF353749);
+  static const border      = Color(0xFF2E2E3C);
+  static const borderLight = Color(0xFF3A3A4C);
+  static const borderMid   = Color(0xFF3A3A4C);
   static const borderGold  = Color(0x33D4A84B); // gold-tinted border for verse cards
 }
 
 class AppTheme {
   static ThemeData get dark => ThemeData(
-    brightness: Brightness.dark,
-    scaffoldBackgroundColor: AppColors.bg,
-    colorScheme: const ColorScheme.dark(
-      primary: AppColors.green,      // main accent (buttons, FABs, active states)
-      secondary: AppColors.purple,   // secondary accent
-      surface: AppColors.card,
-      onSurface: AppColors.text,
-    ),
-    appBarTheme: const AppBarTheme(
-      backgroundColor: Colors.transparent,
-      elevation: 0,
-      centerTitle: false,
-      titleTextStyle: TextStyle(
-        fontSize: 17,
-        fontWeight: FontWeight.w600,
-        color: AppColors.text,
-        letterSpacing: -0.3,
-      ),
-      iconTheme: IconThemeData(color: AppColors.text),
-    ),
-    dividerColor: AppColors.border,
-  );
+        brightness: Brightness.dark,
+        scaffoldBackgroundColor: AppColors.bg,
+        colorScheme: const ColorScheme.dark(
+          primary: AppColors.purple,
+          surface: AppColors.card,
+          onSurface: AppColors.text,
+        ),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: false,
+          titleTextStyle: TextStyle(
+            fontSize: 17,
+            fontWeight: FontWeight.w600,
+            color: AppColors.text,
+            letterSpacing: -0.3,
+          ),
+          iconTheme: IconThemeData(color: AppColors.text),
+        ),
+        dividerColor: AppColors.border,
+      );
 }
 
 class AppText {

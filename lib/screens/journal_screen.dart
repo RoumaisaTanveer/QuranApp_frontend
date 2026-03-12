@@ -60,7 +60,7 @@ class _JournalScreenState extends State<JournalScreen> {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // Top-right glow – use green to reflect primary, with subtle purple mix if you like
+          // Top-right purple glow
           Positioned(
             top: -80,
             right: -80,
@@ -71,7 +71,7 @@ class _JournalScreenState extends State<JournalScreen> {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.green.withOpacity(0.12),
+                    AppColors.purple.withOpacity(0.12),
                     Colors.transparent,
                   ],
                 ),
@@ -95,7 +95,6 @@ class _JournalScreenState extends State<JournalScreen> {
                           Text(
                             'مع القرآن',
                             textDirection: TextDirection.rtl,
-                            // Arabic stays gold to keep the spiritual feel
                             style: AppText.arabic(
                               size: 22,
                               color: AppColors.goldLight,
@@ -110,8 +109,7 @@ class _JournalScreenState extends State<JournalScreen> {
                           ),
                         ],
                       ),
-
-                      // Avatar – keep purple here as a secondary accent orb
+                      // Purple orb avatar
                       Container(
                         width: 46,
                         height: 46,
@@ -149,13 +147,13 @@ class _JournalScreenState extends State<JournalScreen> {
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
                         color: _focus.hasFocus
-                            ? AppColors.green.withOpacity(0.5)
+                            ? AppColors.purple.withOpacity(0.5)
                             : AppColors.border,
                       ),
                       boxShadow: _focus.hasFocus
                           ? [
                               BoxShadow(
-                                color: AppColors.greenGlow,
+                                color: AppColors.purpleGlow,
                                 blurRadius: 20,
                                 spreadRadius: -4,
                               ),
@@ -176,7 +174,7 @@ class _JournalScreenState extends State<JournalScreen> {
                                 height: 7,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: AppColors.greenSoft,
+                                  color: AppColors.purple,
                                 ),
                               ),
                               const SizedBox(width: 8),
@@ -202,7 +200,7 @@ class _JournalScreenState extends State<JournalScreen> {
                             color: AppColors.text,
                             height: 1.7,
                           ),
-                          cursorColor: AppColors.greenSoft,
+                          cursorColor: AppColors.purple,
                           decoration: InputDecoration(
                             hintText:
                                 'Write whatever is on your heart...',
@@ -323,7 +321,8 @@ class _JournalScreenState extends State<JournalScreen> {
                         .map(
                           (e) => GestureDetector(
                             onTap: () {
-                              _ctrl.text = 'I am feeling $e today';
+                              _ctrl.text =
+                                  'I am feeling $e today';
                               _ctrl.selection =
                                   TextSelection.fromPosition(
                                 TextPosition(
@@ -357,7 +356,8 @@ class _JournalScreenState extends State<JournalScreen> {
                               height: 32,
                               decoration: BoxDecoration(
                                 color: AppColors.goldDim,
-                                borderRadius: BorderRadius.circular(9),
+                                borderRadius:
+                                    BorderRadius.circular(9),
                               ),
                               child: const Icon(
                                 Icons.format_quote_rounded,

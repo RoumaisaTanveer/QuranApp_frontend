@@ -1,4 +1,3 @@
-// lib/widgets/widgets.dart
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme.dart';
@@ -10,7 +9,7 @@ class AppCard extends StatelessWidget {
   final EdgeInsets? padding;
   final Color? color;
   final double radius;
-  final bool glowPurple; // kept for compatibility; now "accent glow"
+  final bool glowPurple;
 
   const AppCard({
     super.key,
@@ -30,9 +29,8 @@ class AppCard extends StatelessWidget {
           border: Border.all(color: AppColors.border),
           boxShadow: glowPurple
               ? [
-                  // use green/purple mix instead of pure purple
                   BoxShadow(
-                    color: AppColors.greenGlow,
+                    color: AppColors.purpleGlow,
                     blurRadius: 24,
                     spreadRadius: -4,
                   ),
@@ -97,7 +95,7 @@ class EmotionPill extends StatelessWidget {
   }
 }
 
-// ── Ayah card — matches the reference list card style ────────────────
+// ── Ayah card ─────────────────────────────────────────────────────────
 class AyahCard extends StatefulWidget {
   final AyahMatch ayah;
   final int index;
@@ -153,7 +151,7 @@ class _AyahCardState extends State<AyahCard> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(children: [
-                  // Icon box — keep gold to signify spiritual content
+                  // Gold icon box
                   Container(
                     width: 32,
                     height: 32,
@@ -192,7 +190,7 @@ class _AyahCardState extends State<AyahCard> {
                   _SmallBtn(
                     icon: _copied ? Icons.check_rounded : Icons.copy_rounded,
                     color:
-                        _copied ? AppColors.greenSoft : AppColors.textMuted,
+                        _copied ? AppColors.green : AppColors.textMuted,
                     onTap: _copy,
                   ),
                   const SizedBox(width: 6),
@@ -288,9 +286,9 @@ class ComfortCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         decoration: BoxDecoration(
-          color: AppColors.bg2,
+          color: AppColors.goldDim,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.borderGold),
+          border: Border.all(color: AppColors.gold.withOpacity(0.25)),
         ),
         padding: const EdgeInsets.all(18),
         child: Column(
@@ -334,7 +332,7 @@ class ComfortCard extends StatelessWidget {
       );
 }
 
-// ── Primary button — now green primary, purple secondary ─────────────
+// ── Primary button — purple gradient ──────────────────────────────────
 class PrimaryButton extends StatefulWidget {
   final String label;
   final VoidCallback? onPressed;
@@ -376,10 +374,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
               gradient: widget.secondary
                   ? null
                   : const LinearGradient(
-                      // green-based primary, slightly warmer top
                       colors: [
-                        AppColors.greenSoft,
-                        AppColors.green,
+                        AppColors.purple,
+                        AppColors.purpleLight,
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -393,7 +390,7 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                   ? null
                   : [
                       BoxShadow(
-                        color: AppColors.green.withOpacity(
+                        color: AppColors.purple.withOpacity(
                           _pressed ? 0.15 : 0.3,
                         ),
                         blurRadius: 16,
@@ -407,8 +404,9 @@ class _PrimaryButtonState extends State<PrimaryButton> {
                     height: 16,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      color:
-                          widget.secondary ? AppColors.purple : Colors.white,
+                      color: widget.secondary
+                          ? AppColors.purple
+                          : Colors.white,
                     ),
                   )
                 : Row(
@@ -481,7 +479,6 @@ class _LoadingDotsState extends State<LoadingDots>
               height: 7,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                // use purple as subtle loading accent
                 color: AppColors.purple.withOpacity(0.2 + 0.8 * o),
               ),
             );
@@ -535,7 +532,7 @@ class EmptyState extends StatelessWidget {
                 PrimaryButton(
                   label: buttonLabel!,
                   onPressed: onButton,
-                  secondary: true, // secondary = outlined / neutral
+                  secondary: true,
                 ),
               ],
             ],

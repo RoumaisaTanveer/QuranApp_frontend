@@ -1,4 +1,3 @@
-// lib/screens/splash_screen.dart
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -31,7 +30,10 @@ class _SplashScreenState extends State<SplashScreen>
       switchInCurve: Curves.easeIn,
       switchOutCurve: Curves.easeOut,
       child: _done
-          ? KeyedSubtree(key: const ValueKey('app'), child: widget.child)
+          ? KeyedSubtree(
+              key: const ValueKey('app'),
+              child: widget.child,
+            )
           : const KeyedSubtree(
               key: ValueKey('splash'),
               child: _SplashContent(),
@@ -49,7 +51,7 @@ class _SplashContent extends StatelessWidget {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // Background glow: green core with subtle purple edge
+          // Background purple glow
           Center(
             child: Container(
               width: 300,
@@ -58,11 +60,9 @@ class _SplashContent extends StatelessWidget {
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: [
-                    AppColors.green.withOpacity(0.22),
-                    AppColors.purple.withOpacity(0.05),
+                    AppColors.purple.withOpacity(0.15),
                     Colors.transparent,
                   ],
-                  stops: const [0.0, 0.55, 1.0],
                 ),
               ),
             ),
@@ -80,7 +80,7 @@ class _SplashContent extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Glowing orb icon – green with gold rim, soft purple glow
+                // Glowing orb icon – purple only
                 Container(
                   width: 90,
                   height: 90,
@@ -88,28 +88,19 @@ class _SplashContent extends StatelessWidget {
                     shape: BoxShape.circle,
                     gradient: const LinearGradient(
                       colors: [
-                        AppColors.greenSoft,
-                        AppColors.green,
+                        AppColors.purple,
+                        Color(0xFF5B3CC4),
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.greenGlow,
+                        color: AppColors.purpleGlow,
                         blurRadius: 40,
                         spreadRadius: 5,
                       ),
-                      BoxShadow(
-                        color: AppColors.purpleGlow,
-                        blurRadius: 60,
-                        spreadRadius: -5,
-                      ),
                     ],
-                    border: Border.all(
-                      color: AppColors.gold.withOpacity(0.65),
-                      width: 1.4,
-                    ),
                   ),
                   child: const Icon(
                     Icons.menu_book_rounded,
@@ -128,7 +119,7 @@ class _SplashContent extends StatelessWidget {
 
                 const SizedBox(height: 32),
 
-                // Arabic title (gold, as before)
+                // Arabic title (gold)
                 Text(
                   'مع القرآن',
                   textDirection: TextDirection.rtl,
@@ -156,11 +147,14 @@ class _SplashContent extends StatelessWidget {
                     color: AppColors.textSub,
                     weight: FontWeight.w300,
                   ),
-                ).animate().fadeIn(delay: 700.ms, duration: 600.ms),
+                ).animate().fadeIn(
+                      delay: 700.ms,
+                      duration: 600.ms,
+                    ),
 
                 const SizedBox(height: 60),
 
-                // Loading dots – use purple for continuity with rest of app
+                // Loading dots – purple
                 _PulseDots()
                     .animate()
                     .fadeIn(delay: 1000.ms, duration: 400.ms),
@@ -183,7 +177,10 @@ class _SplashContent extends StatelessWidget {
               ),
             )
                 .animate()
-                .fadeIn(delay: 900.ms, duration: 800.ms),
+                .fadeIn(
+                  delay: 900.ms,
+                  duration: 800.ms,
+                ),
           ),
         ],
       ),
@@ -228,7 +225,6 @@ class _PulseDotsState extends State<_PulseDots>
               height: 6,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                // still purple for subtle brand continuity
                 color: AppColors.purple.withOpacity(0.2 + 0.8 * o),
               ),
             );
