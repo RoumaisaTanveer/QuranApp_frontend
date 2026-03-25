@@ -60,7 +60,23 @@ class ApiService {
     }
     throw Exception('Failed to load bookmarks');
   }
+  // Add this method to your ApiService class in lib/services/api_service.dart
 
+  static Future<void> submitFeedback({
+    required int entryId,
+    required int ayahIndex,
+    required int rating,
+  }) async {
+   await http.post(
+     Uri.parse('$baseUrl/feedback'),
+     headers: {'Content-Type': 'application/json'},
+     body: jsonEncode({
+       'entry_id': entryId,
+       'ayah_index': ayahIndex,
+       'rating': rating,
+     }),
+   );
+  }
   static Future<void> removeBookmark(int ayahIndex) async {
     await http.delete(Uri.parse('$baseUrl/bookmark/$ayahIndex'));
   }
