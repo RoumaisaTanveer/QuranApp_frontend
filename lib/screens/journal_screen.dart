@@ -1,4 +1,5 @@
 // lib/screens/journal_screen.dart
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme.dart';
@@ -18,12 +19,36 @@ class _JournalScreenState extends State<JournalScreen> {
   final _focus = FocusNode();
   bool _loading = false;
   String _error = '';
+  // Tracks elapsed seconds while loading so we can show a reassuring message
+  int _loadingSeconds = 0;
+  Timer? _loadTimer;
 
   @override
   void dispose() {
     _ctrl.dispose();
     _focus.dispose();
+    _loadTimer?.cancel();
     super.dispose();
+  }
+
+  void _startLoadTimer() {
+    _loadingSeconds = 0;
+    _loadTimer = Timer.periodic(const Duration(seconds: 1), (t) {
+      if (mounted) setState(() => _loadingSeconds++);
+    });
+  }
+
+  void _stopLoadTimer() {
+    _loadTimer?.cancel();
+    _loadTimer = null;
+    _loadingSeconds = 0;
+  }
+
+  String get _loadingHint {
+    if (_loadingSeconds < 5)  return 'Finding verses for you...';
+    if (_loadingSeconds < 15) return 'Searching the Quran...';
+    if (_loadingSeconds < 30) return 'Almost there...';
+    return 'Waking the server, please wait...';
   }
 
   Future<void> _submit() async {
@@ -32,6 +57,7 @@ class _JournalScreenState extends State<JournalScreen> {
       _loading = true;
       _error = '';
     });
+    _startLoadTimer();
     try {
       final res = await ApiService.matchAyahs(_ctrl.text.trim());
       if (!mounted) return;
@@ -46,10 +72,12 @@ class _JournalScreenState extends State<JournalScreen> {
         ),
       );
       _ctrl.clear();
+    } on TimeoutException {
+      setState(() => _error = 'Request timed out. Check your connection or try again.');
     } catch (e) {
-      setState(() =>
-          _error = 'Could not reach server. Is the backend running?');
+      setState(() => _error = 'Could not reach server. Is the backend running?');
     } finally {
+      _stopLoadTimer();
       if (mounted) setState(() => _loading = false);
     }
   }
@@ -100,321 +128,189 @@ class _JournalScreenState extends State<JournalScreen> {
                               color: AppColors.goldLight,
                             ),
                           ),
+                          const SizedBox(height: 2),
                           Text(
                             'With the Quran',
-                            style: AppText.label(
-                              size: 12,
-                              color: AppColors.textSub,
+                            style: AppText.sans(
+                              size: 11,
+                              color: AppColors.textMuted,
                             ),
                           ),
                         ],
                       ),
-                      // Purple orb avatar
+                      // Date chip
                       Container(
-                        width: 46,
-                        height: 46,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: const LinearGradient(
-                            colors: [AppColors.purple, Color(0xFF5B3CC4)],
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.purpleGlow,
-                              blurRadius: 20,
-                              spreadRadius: -2,
-                            ),
-                          ],
+                          color: AppColors.card,
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: AppColors.border),
                         ),
-                        child: const Icon(
-                          Icons.menu_book_rounded,
-                          color: Colors.white,
-                          size: 20,
+                        child: Text(
+                          _todayLabel(),
+                          style: AppText.label(
+                              size: 10, color: AppColors.textDim, spacing: 0.3),
                         ),
                       ),
                     ],
-                  ).animate().fadeIn(delay: 100.ms),
+                  ).animate().fadeIn(duration: 400.ms),
 
-                  const SizedBox(height: 28),
+                  const SizedBox(height: 32),
 
-                  // Journal card
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
+                  // Prompt
+                  Text(
+                    'How are you feeling today?',
+                    style: AppText.sans(size: 22, color: AppColors.text),
+                  ).animate().fadeIn(delay: 100.ms).slideY(begin: 0.1, end: 0),
+
+                  const SizedBox(height: 6),
+
+                  Text(
+                    'Write freely — as little or as much as you need.',
+                    style: AppText.sans(
+                        size: 13, color: AppColors.textDim, italic: true),
+                  ).animate().fadeIn(delay: 180.ms),
+
+                  const SizedBox(height: 20),
+
+                  // Journal text field
+                  Container(
                     decoration: BoxDecoration(
-                      color: AppColors.bg2,
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.card,
+                      borderRadius: BorderRadius.circular(20),
                       border: Border.all(
                         color: _focus.hasFocus
                             ? AppColors.purple.withOpacity(0.5)
                             : AppColors.border,
                       ),
-                      boxShadow: _focus.hasFocus
-                          ? [
-                              BoxShadow(
-                                color: AppColors.purpleGlow,
-                                blurRadius: 20,
-                                spreadRadius: -4,
-                              ),
-                            ]
-                          : [],
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // small status dot + label
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(16, 14, 16, 0),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 7,
-                                height: 7,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: AppColors.purple,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              Text(
-                                "Today's Reflection",
-                                style: AppText.sans(
-                                  size: 13,
-                                  color: AppColors.textSub,
-                                  weight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        TextField(
-                          controller: _ctrl,
-                          focusNode: _focus,
-                          maxLines: 7,
-                          minLines: 5,
-                          onChanged: (_) => setState(() {}),
-                          style: AppText.sans(
-                            size: 15,
-                            color: AppColors.text,
-                            height: 1.7,
-                          ),
-                          cursorColor: AppColors.purple,
-                          decoration: InputDecoration(
-                            hintText:
-                                'Write whatever is on your heart...',
-                            hintStyle: AppText.sans(
-                              size: 15,
-                              color: AppColors.textMuted,
-                              height: 1.7,
-                            ).copyWith(fontStyle: FontStyle.italic),
-                            border: InputBorder.none,
-                            filled: false,
-                            contentPadding:
-                                const EdgeInsets.fromLTRB(16, 10, 16, 0),
-                          ),
-                        ),
-                        // Bottom of card — char count + button
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(16, 8, 14, 14),
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '${_ctrl.text.length} chars',
-                                style: AppText.label(
-                                  size: 10,
-                                  color: AppColors.textMuted,
-                                ),
-                              ),
-                              _loading
-                                  ? const SizedBox(
-                                      height: 36,
-                                      child: Center(
-                                        child: LoadingDots(),
-                                      ),
-                                    )
-                                  : PrimaryButton(
-                                      label: 'Seek Guidance',
-                                      icon: Icons.auto_awesome_rounded,
-                                      onPressed: _ctrl.text
-                                              .trim()
-                                              .isEmpty
-                                          ? null
-                                          : _submit,
-                                    ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                      .animate()
-                      .fadeIn(delay: 200.ms)
-                      .slideY(begin: 0.08, end: 0),
-
-                  // Error
-                  if (_error.isNotEmpty) ...[
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: AppColors.red.withOpacity(0.08),
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: AppColors.red.withOpacity(0.3),
-                        ),
+                    child: TextField(
+                      controller: _ctrl,
+                      focusNode: _focus,
+                      maxLines: 8,
+                      minLines: 5,
+                      style: AppText.sans(
+                          size: 15, color: AppColors.text, height: 1.6),
+                      decoration: InputDecoration(
+                        hintText:
+                            'Today I feel... / Aaj mujhe lag raha hai...',
+                        hintStyle: AppText.sans(
+                            size: 14,
+                            color: AppColors.textMuted,
+                            italic: true),
+                        border: InputBorder.none,
+                        contentPadding: const EdgeInsets.all(18),
                       ),
-                      child: Row(
+                      onChanged: (_) => setState(() {}),
+                    ),
+                  ).animate().fadeIn(delay: 250.ms),
+
+                  const SizedBox(height: 6),
+
+                  // Character count
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '${_ctrl.text.length} chars',
+                      style: AppText.label(
+                          size: 10, color: AppColors.textMuted, spacing: 0),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  // Loading hint (only shown while loading)
+                  if (_loading)
+                    Center(
+                      child: Column(
                         children: [
-                          const Icon(
-                            Icons.error_outline_rounded,
-                            size: 15,
-                            color: AppColors.red,
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
+                          const LoadingDots(),
+                          const SizedBox(height: 10),
+                          AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 400),
                             child: Text(
-                              _error,
-                              style: AppText.label(
-                                size: 12,
-                                color: AppColors.red,
-                              ),
+                              _loadingHint,
+                              key: ValueKey(_loadingSeconds ~/ 5),
+                              style: AppText.sans(
+                                  size: 13,
+                                  color: AppColors.textDim,
+                                  italic: true),
+                              textAlign: TextAlign.center,
                             ),
                           ),
                         ],
                       ),
-                    ),
+                    ).animate().fadeIn()
+                  else
+                    Center(
+                      child: PrimaryButton(
+                        label: 'Find My Verse',
+                        icon: Icons.auto_awesome_rounded,
+                        onPressed:
+                            _ctrl.text.trim().isEmpty ? null : _submit,
+                        isLoading: _loading,
+                      ),
+                    ).animate().fadeIn(delay: 300.ms),
+
+                  // Error
+                  if (_error.isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      decoration: BoxDecoration(
+                        color: AppColors.red.withOpacity(0.08),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                            color: AppColors.red.withOpacity(0.25)),
+                      ),
+                      child: Row(children: [
+                        const Icon(Icons.error_outline_rounded,
+                            size: 16, color: AppColors.red),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            _error,
+                            style: AppText.sans(
+                                size: 13, color: AppColors.red),
+                          ),
+                        ),
+                      ]),
+                    ).animate().fadeIn().shakeX(),
                   ],
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 40),
 
-                  // Quick emotion selector
-                  Text(
-                    'How are you feeling?',
-                    style: AppText.sans(
-                      size: 13,
-                      color: AppColors.textSub,
-                      weight: FontWeight.w500,
-                    ),
-                  ).animate().fadeIn(delay: 350.ms),
-                  const SizedBox(height: 10),
-
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      'stressed',
-                      'sad',
-                      'anxious',
-                      'lonely',
-                      'grateful',
-                      'hopeful',
-                      'peaceful',
-                      'angry',
-                      'tired',
-                      'confused',
-                    ]
-                        .map(
-                          (e) => GestureDetector(
-                            onTap: () {
-                              _ctrl.text =
-                                  'I am feeling $e today';
-                              _ctrl.selection =
-                                  TextSelection.fromPosition(
-                                TextPosition(
-                                  offset: _ctrl.text.length,
-                                ),
-                              );
-                              setState(() {});
-                            },
-                            child: EmotionPill(e, small: true),
-                          ),
-                        )
-                        .toList(),
-                  ).animate().fadeIn(delay: 400.ms),
-
-                  const SizedBox(height: 24),
-
-                  // Ayah of the day
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.bg2,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.borderGold),
-                    ),
-                    padding: const EdgeInsets.all(18),
-                    child: Column(
-                      children: [
-                        Row(
-                          children: [
-                            Container(
-                              width: 32,
-                              height: 32,
-                              decoration: BoxDecoration(
-                                color: AppColors.goldDim,
-                                borderRadius:
-                                    BorderRadius.circular(9),
-                              ),
-                              child: const Icon(
-                                Icons.format_quote_rounded,
-                                size: 16,
-                                color: AppColors.gold,
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Text(
-                              'Verse of the Day',
-                              style: AppText.sans(
-                                size: 13,
-                                weight: FontWeight.w600,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        Text(
-                          'أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ',
-                          textAlign: TextAlign.center,
-                          textDirection: TextDirection.rtl,
-                          style: AppText.arabic(size: 18),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          '"Verily, in the remembrance of Allah do hearts find rest."',
-                          textAlign: TextAlign.center,
-                          style: AppText.sans(
-                            size: 13,
-                            color: AppColors.textSub,
-                            height: 1.6,
-                          ).copyWith(fontStyle: FontStyle.italic),
-                        ),
-                        const SizedBox(height: 10),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 10,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.goldDim,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: Text(
-                            "Ar-Ra'd · 28",
-                            style: AppText.label(
-                              size: 10,
-                              color: AppColors.gold,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                  // Quran verse footer
+                  Center(
+                    child: Column(children: [
+                      Text(
+                        'أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ',
+                        textDirection: TextDirection.rtl,
+                        textAlign: TextAlign.center,
+                        style: AppText.arabic(
+                            size: 16, color: AppColors.goldLight),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        'Verily, in the remembrance of Allah do hearts find rest.',
+                        textAlign: TextAlign.center,
+                        style: AppText.sans(
+                            size: 11,
+                            color: AppColors.textMuted,
+                            italic: true),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Ar-Ra\'d 13:28',
+                        style: AppText.label(
+                            size: 9,
+                            color: AppColors.textMuted,
+                            spacing: 0.5),
+                      ),
+                    ]),
                   ).animate().fadeIn(delay: 500.ms),
-
-                  const SizedBox(height: 20),
                 ],
               ),
             ),
@@ -422,5 +318,15 @@ class _JournalScreenState extends State<JournalScreen> {
         ],
       ),
     );
+  }
+
+  String _todayLabel() {
+    final now = DateTime.now();
+    const months = [
+      'Jan','Feb','Mar','Apr','May','Jun',
+      'Jul','Aug','Sep','Oct','Nov','Dec'
+    ];
+    const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    return '${days[now.weekday - 1]}, ${now.day} ${months[now.month - 1]}';
   }
 }

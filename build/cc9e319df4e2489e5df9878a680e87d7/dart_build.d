@@ -1,1 +1,0 @@
- D:\\quran_journal_frontend\\build\\cc9e319df4e2489e5df9878a680e87d7\\dart_build_result.json:  D:\\flutter\\bin\\cache\\dart-sdk\\version D:\\quran_journal_frontend\\.dart_tool\\package_config.json D:\\quran_journal_frontend\\pubspec.yaml d:\\quran_journal_frontend\\.dart_tool\\package_config.json
