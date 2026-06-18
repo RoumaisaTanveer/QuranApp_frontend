@@ -16,6 +16,7 @@ class WellbeingScreen extends StatefulWidget {
 
 class _WellbeingScreenState extends State<WellbeingScreen> {
   List<HistoryItem> _history = [];
+  WeeklyPattern? _pattern;
   bool _loading = true;
   int _days = 30;
 
@@ -35,7 +36,14 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
     setState(() => _loading = true);
     try {
       final h = await ApiService.getHistory();
-      setState(() => _history = h);
+      WeeklyPattern? pattern;
+      try {
+        pattern = await ApiService.getPattern();
+      } catch (_) {}
+      setState(() {
+        _history = h;
+        _pattern = pattern;
+      });
     } catch (_) {} finally {
       setState(() => _loading = false);
     }
@@ -97,6 +105,12 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
           _periodRow().animate().fadeIn(),
           const SizedBox(height: 20),
 
+          // Server-side pattern summary (GET /pattern)
+          if (_pattern != null) ...[
+            _patternSummary(_pattern!).animate().fadeIn(delay: 80.ms),
+            const SizedBox(height: 16),
+          ],
+
           // Stats
           _statsRow(total, posRate, improved, dominant)
               .animate().fadeIn(delay: 100.ms),
@@ -132,6 +146,94 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
       ),
     );
   }
+
+  Widget _patternSummary(WeeklyPattern p) => AppCard(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Your Journey',
+              style: AppText.label(size: 11, spacing: 1.5),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'Insights from your journaling history',
+              style: AppText.sans(
+                size: 12,
+                italic: true,
+                color: AppColors.textDim,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _PatternStat(
+                    label: 'Dominant',
+                    value: p.dominantEmotion,
+                    icon: Icons.favorite_outline_rounded,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _PatternStat(
+                    label: 'Shifts',
+                    value: '${p.shiftToPositive}',
+                    sub: 'to positive',
+                    icon: Icons.trending_up_rounded,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _PatternStat(
+                    label: 'Entries',
+                    value: '${p.totalEntries}',
+                    icon: Icons.edit_note_rounded,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _PatternStat(
+                    label: 'Most shown',
+                    value: p.mostShownSurah,
+                    small: true,
+                    icon: Icons.auto_stories_outlined,
+                  ),
+                ),
+              ],
+            ),
+            if (p.emotionFrequency.isNotEmpty) ...[
+              const SizedBox(height: 16),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: p.emotionFrequency.entries.map((e) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.bg3,
+                      borderRadius: BorderRadius.circular(100),
+                      border: Border.all(color: AppColors.border),
+                    ),
+                    child: Text(
+                      '${e.key} · ${e.value}',
+                      style: AppText.label(size: 9, spacing: 0.3),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
+          ],
+        ),
+      );
 
   Widget _periodRow() => Row(
     children: {'7 Days': 7, '30 Days': 30, 'All Time': 999}.entries.map((e) =>
@@ -360,6 +462,52 @@ class _WellbeingScreenState extends State<WellbeingScreen> {
       ],
     ));
   }
+}
+
+class _PatternStat extends StatelessWidget {
+  final String label;
+  final String value;
+  final String? sub;
+  final IconData icon;
+  final bool small;
+
+  const _PatternStat({
+    required this.label,
+    required this.value,
+    required this.icon,
+    this.sub,
+    this.small = false,
+  });
+
+  @override
+  Widget build(BuildContext context) => Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: AppColors.bg3,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, size: 14, color: AppColors.purpleLight),
+            const SizedBox(height: 8),
+            Text(label, style: AppText.label(size: 8, spacing: 0.5)),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: AppText.sans(
+                size: small ? 12 : 16,
+                color: AppColors.purpleLight,
+                weight: FontWeight.w600,
+              ),
+            ),
+            if (sub != null)
+              Text(sub!, style: AppText.label(size: 8, spacing: 0)),
+          ],
+        ),
+      );
 }
 
 class _StatCard extends StatelessWidget {

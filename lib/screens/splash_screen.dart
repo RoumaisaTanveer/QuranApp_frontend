@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
+import '../services/auth_service.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'login_screen.dart';
+import 'main_shell.dart';
 
+/// Splash + auth gate on launch.
+/// Endpoints: validates stored token via GET /auth/me
 class SplashScreen extends StatefulWidget {
-  final Widget child;
-  const SplashScreen({super.key, required this.child});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -12,33 +16,29 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  bool _done = false;
-
   @override
   void initState() {
     super.initState();
-    // Show splash for 2.8 seconds then fade to app
-    Future.delayed(const Duration(milliseconds: 2800), () {
-      if (mounted) setState(() => _done = true);
-    });
+    _checkAuth();
+  }
+
+  Future<void> _checkAuth() async {
+    // Minimum branding display time
+    await Future.delayed(const Duration(milliseconds: 2200));
+    final valid = await AuthService.instance.validateSession();
+    if (!mounted) return;
+    await Future.delayed(const Duration(milliseconds: 400));
+    if (!mounted) return;
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => valid ? const MainShell() : const LoginScreen(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 600),
-      switchInCurve: Curves.easeIn,
-      switchOutCurve: Curves.easeOut,
-      child: _done
-          ? KeyedSubtree(
-              key: const ValueKey('app'),
-              child: widget.child,
-            )
-          : const KeyedSubtree(
-              key: ValueKey('splash'),
-              child: _SplashContent(),
-            ),
-    );
+    return const _SplashContent();
   }
 }
 
@@ -51,7 +51,6 @@ class _SplashContent extends StatelessWidget {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // Background purple glow
           Center(
             child: Container(
               width: 300,
@@ -74,23 +73,17 @@ class _SplashContent extends StatelessWidget {
                 duration: 2800.ms,
                 curve: Curves.easeOut,
               ),
-
-          // Main content
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Glowing orb icon – purple only
                 Container(
                   width: 90,
                   height: 90,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: const LinearGradient(
-                      colors: [
-                        AppColors.purple,
-                        Color(0xFF5B3CC4),
-                      ],
+                      colors: [AppColors.purple, Color(0xFF5B3CC4)],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
@@ -116,10 +109,7 @@ class _SplashContent extends StatelessWidget {
                       curve: Curves.elasticOut,
                     )
                     .fadeIn(duration: 400.ms),
-
                 const SizedBox(height: 32),
-
-                // Arabic title (gold)
                 Text(
                   'مع القرآن',
                   textDirection: TextDirection.rtl,
@@ -130,16 +120,8 @@ class _SplashContent extends StatelessWidget {
                 )
                     .animate()
                     .fadeIn(delay: 500.ms, duration: 600.ms)
-                    .slideY(
-                      begin: 0.2,
-                      end: 0,
-                      delay: 500.ms,
-                      duration: 600.ms,
-                    ),
-
+                    .slideY(begin: 0.2, end: 0, delay: 500.ms, duration: 600.ms),
                 const SizedBox(height: 8),
-
-                // English subtitle
                 Text(
                   'With the Quran',
                   style: AppText.sans(
@@ -147,22 +129,14 @@ class _SplashContent extends StatelessWidget {
                     color: AppColors.textSub,
                     weight: FontWeight.w300,
                   ),
-                ).animate().fadeIn(
-                      delay: 700.ms,
-                      duration: 600.ms,
-                    ),
-
+                ).animate().fadeIn(delay: 700.ms, duration: 600.ms),
                 const SizedBox(height: 60),
-
-                // Loading dots – purple
                 _PulseDots()
                     .animate()
                     .fadeIn(delay: 1000.ms, duration: 400.ms),
               ],
             ),
           ),
-
-          // Bottom tagline
           Positioned(
             bottom: 48,
             left: 0,
@@ -175,12 +149,7 @@ class _SplashContent extends StatelessWidget {
                 size: 14,
                 color: AppColors.textMuted,
               ),
-            )
-                .animate()
-                .fadeIn(
-                  delay: 900.ms,
-                  duration: 800.ms,
-                ),
+            ).animate().fadeIn(delay: 900.ms, duration: 800.ms),
           ),
         ],
       ),

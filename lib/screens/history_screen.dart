@@ -5,6 +5,7 @@ import '../theme.dart';
 import '../models/models.dart';
 import '../services/api_service.dart';
 import '../widgets/widgets.dart';
+import 'history_detail_screen.dart';
 
 class HistoryScreen extends StatefulWidget {
   const HistoryScreen({super.key, this.initialTab = 0});
@@ -51,13 +52,21 @@ class _HistoryScreenState extends State<HistoryScreen>
     }
   }
 
-  Future<void> _deleteEntry(int reversedIndex) async {
-    final originalIndex = _history.length - 1 - reversedIndex;
+  Future<void> _deleteEntry(int index) async {
+    final item = _history[index];
     try {
-      await ApiService.deleteEntry(originalIndex);
-      setState(() => _history.removeAt(reversedIndex));
+      await ApiService.deleteEntry(item.id);
+      setState(() => _history.removeAt(index));
       if (mounted) _snack('Entry deleted');
     } catch (_) {}
+  }
+
+  Future<void> _openEntry(HistoryItem item) async {
+    final deleted = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (_) => HistoryDetailScreen(item: item)),
+    );
+    if (deleted == true && mounted) _loadData();
   }
 
   Future<void> _removeBookmark(int ayahIndex, int listIdx) async {
@@ -145,6 +154,7 @@ class _HistoryScreenState extends State<HistoryScreen>
       itemBuilder: (_, i) => _EntryCard(
         item: _history[i],
         date: _formatDate(_history[i].timestamp),
+        onTap: () => _openEntry(_history[i]),
         onDelete: () => _showDeleteDialog(i),
       ).animate().fadeIn(delay: Duration(milliseconds: i * 50)),
     );
@@ -277,14 +287,22 @@ class _HistoryScreenState extends State<HistoryScreen>
 class _EntryCard extends StatelessWidget {
   final HistoryItem item;
   final String date;
+  final VoidCallback onTap;
   final VoidCallback onDelete;
-  const _EntryCard({required this.item, required this.date, required this.onDelete});
+  const _EntryCard({
+    required this.item,
+    required this.date,
+    required this.onTap,
+    required this.onDelete,
+  });
 
   @override
   Widget build(BuildContext context) {
     final afterCat = item.emotionAfter != null
         ? EmotionMeta.getCategory(item.emotionAfter!) : null;
-    return Container(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: AppColors.card,
@@ -315,6 +333,7 @@ class _EntryCard extends StatelessWidget {
                 )),
                 GestureDetector(
                   onTap: onDelete,
+                  behavior: HitTestBehavior.opaque,
                   child: Container(
                     width: 32, height: 32,
                     decoration: BoxDecoration(
@@ -352,6 +371,7 @@ class _EntryCard extends StatelessWidget {
           ),
         ],
       ),
+    ),
     );
   }
 }

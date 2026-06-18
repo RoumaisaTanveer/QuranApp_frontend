@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "sync-config",
+      "type": "shell",
+      "command": "powershell",
+      "args": ["-ExecutionPolicy", "Bypass", "-File", "${workspaceFolder}/sync_config.ps1"],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    }
+  ]
+}

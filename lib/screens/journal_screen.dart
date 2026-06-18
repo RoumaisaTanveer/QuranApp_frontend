@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../theme.dart';
-import '../models/models.dart';
 import '../services/api_service.dart';
 import '../widgets/widgets.dart';
+import 'profile_screen.dart';
 import 'results_screen.dart';
 
 class JournalScreen extends StatefulWidget {
@@ -138,20 +138,49 @@ class _JournalScreenState extends State<JournalScreen> {
                           ),
                         ],
                       ),
-                      // Date chip
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: AppColors.card,
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(color: AppColors.border),
-                        ),
-                        child: Text(
-                          _todayLabel(),
-                          style: AppText.label(
-                              size: 10, color: AppColors.textDim, spacing: 0.3),
-                        ),
+                      // Profile + date
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const ProfileScreen(),
+                              ),
+                            ),
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: AppColors.card,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: AppColors.border),
+                              ),
+                              child: const Icon(
+                                Icons.person_outline_rounded,
+                                size: 18,
+                                color: AppColors.textMuted,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 6),
+                            decoration: BoxDecoration(
+                              color: AppColors.card,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(color: AppColors.border),
+                            ),
+                            child: Text(
+                              _todayLabel(),
+                              style: AppText.label(
+                                  size: 10,
+                                  color: AppColors.textDim,
+                                  spacing: 0.3),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ).animate().fadeIn(duration: 400.ms),

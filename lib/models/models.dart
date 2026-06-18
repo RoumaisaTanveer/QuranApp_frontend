@@ -58,6 +58,7 @@ class MatchResponse {
 }
 
 class HistoryItem {
+  final int id;
   final String entry;
   final String emotionBefore;
   final String? emotionAfter;
@@ -66,6 +67,7 @@ class HistoryItem {
   final String timestamp;
 
   HistoryItem({
+    required this.id,
     required this.entry,
     required this.emotionBefore,
     this.emotionAfter,
@@ -75,6 +77,7 @@ class HistoryItem {
   });
 
   factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
+        id: json['id'] ?? 0,
         entry: json['entry'] ?? '',
         emotionBefore: json['emotion_before'] ?? '',
         emotionAfter: json['emotion_after'],
@@ -143,4 +146,35 @@ class EmotionMeta {
 
   static String getEmoji(String emotion) =>
       data[emotion]?['emoji'] ?? '✦';
+}
+
+class WeeklyPattern {
+  final int totalEntries;
+  final Map<String, int> emotionFrequency;
+  final String dominantEmotion;
+  final int shiftToPositive;
+  final String mostShownSurah;
+
+  WeeklyPattern({
+    required this.totalEntries,
+    required this.emotionFrequency,
+    required this.dominantEmotion,
+    required this.shiftToPositive,
+    required this.mostShownSurah,
+  });
+
+  factory WeeklyPattern.fromJson(Map<String, dynamic> json) {
+    final freq = <String, int>{};
+    final raw = json['emotion_frequency'];
+    if (raw is Map) {
+      raw.forEach((k, v) => freq[k.toString()] = (v as num).toInt());
+    }
+    return WeeklyPattern(
+      totalEntries: json['total_entries'] ?? 0,
+      emotionFrequency: freq,
+      dominantEmotion: json['dominant_emotion'] ?? '—',
+      shiftToPositive: json['shift_to_positive'] ?? 0,
+      mostShownSurah: json['most_shown_surah'] ?? '—',
+    );
+  }
 }

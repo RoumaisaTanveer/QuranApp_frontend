@@ -1,0 +1,4 @@
+// Copy to AppConfig.xcconfig or let run_app.ps1 generate it from app_config.properties.
+APP_BUNDLE_ID = com.yourcompany.quranjournal
+GOOGLE_IOS_CLIENT_ID = YOUR_IOS_CLIENT_ID.apps.googleusercontent.com
+GOOGLE_IOS_URL_SCHEME = com.googleusercontent.apps.YOUR_IOS_CLIENT_SUFFIX

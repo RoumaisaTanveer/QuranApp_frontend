@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Quran Journal (Chrome)",
+      "request": "launch",
+      "type": "dart",
+      "deviceId": "chrome",
+      "preLaunchTask": "sync-config",
+      "toolArgs": [
+        "--dart-define-from-file=dart_defines.web.json",
+        "--web-port=8080"
+      ]
+    },
+    {
+      "name": "Quran Journal (Android)",
+      "request": "launch",
+      "type": "dart",
+      "preLaunchTask": "sync-config",
+      "toolArgs": [
+        "--dart-define-from-file=dart_defines.android.json"
+      ]
+    }
+  ]
+}

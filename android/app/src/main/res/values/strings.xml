@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Overridden by app_config.properties → build.gradle.kts resValue when set -->
+    <string name="default_web_client_id">REPLACE_IN_app_config.properties</string>
+</resources>

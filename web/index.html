@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <base href="$FLUTTER_BASE_HREF">
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="مع القرآن — With the Quran">
+  <meta name="description" content="With the Quran - Quranic journal app">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="مع القرآن">
+  <meta name="apple-mobile-web-app-title" content="Quran Journal">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-signin-client_id" content="998396667150-iie1o8gd8u1g235b9910v4a94gai7hmp.apps.googleusercontent.com">
   <link rel="apple-touch-icon" href="icons/Icon-192.png">
   <link rel="icon" type="image/png" href="favicon.png"/>
-  <title>مع القرآن</title>
+  <title>Quran Journal</title>
   <style>
     body {
       background-color: #070709;
@@ -22,19 +23,32 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      gap: 10px;
       height: 100vh;
-      color: #c9a84c;
-      font-family: serif;
-      font-size: 1.5rem;
-      letter-spacing: 0.2em;
+    }
+    .loading span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #c9a84c;
+      animation: pulse 1.2s ease-in-out infinite;
+    }
+    .loading span:nth-child(2) { animation-delay: 0.2s; }
+    .loading span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse {
+      0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+      40% { opacity: 1; transform: scale(1); }
     }
   </style>
 </head>
 <body>
-  <div class="loading" id="loading">✦ &nbsp; ✦ &nbsp; ✦</div>
+  <div class="loading" id="loading">
+    <span></span><span></span><span></span>
+  </div>
   <script>
-    window.addEventListener('load', function(ev) {
-      document.getElementById('loading').style.display = 'none';
+    window.addEventListener('load', function() {
+      var el = document.getElementById('loading');
+      if (el) el.style.display = 'none';
     });
   </script>
   <script src="flutter_bootstrap.js" async></script>
