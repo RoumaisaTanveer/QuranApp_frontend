@@ -133,7 +133,12 @@ class AuthService {
       throw AuthException(GoogleAuthConfig.missingConfigMessage);
     }
 
-    final account = await _googleSignIn.signIn();
+    GoogleSignInAccount? account;
+    try {
+      account = await _googleSignIn.signIn();
+    } catch (e) {
+      throw AuthException(_friendlyGoogleError(e));
+    }
     if (account == null) {
       throw const AuthException('Sign in cancelled.');
     }
@@ -142,10 +147,7 @@ class AuthService {
     try {
       googleAuth = await account.authentication;
     } catch (e) {
-      throw AuthException(
-        'Google token error: $e\n'
-        'If you see 403: enable "Google People API" in Google Cloud Console.',
-      );
+      throw AuthException(_friendlyGoogleError(e));
     }
 
     final idToken = googleAuth.idToken;
@@ -215,6 +217,20 @@ class AuthService {
     return AuthUser.fromJson(
       jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>,
     );
+  }
+
+  static String _friendlyGoogleError(Object e) {
+    final msg = e.toString();
+    if (msg.contains('people.googleapis.com') ||
+        msg.contains('People API') ||
+        msg.contains('SERVICE_DISABLED')) {
+      return 'Enable Google People API in Cloud Console, wait 2 min, then retry.\n'
+          'https://console.developers.google.com/apis/api/people.googleapis.com/overview?project=998396667150';
+    }
+    if (msg.contains('origin_mismatch')) {
+      return 'Google origin_mismatch — use port 8080 and add http://localhost:8080 to JavaScript origins.';
+    }
+    return 'Google sign-in failed. $msg';
   }
 
   Future<bool> validateSession() async {

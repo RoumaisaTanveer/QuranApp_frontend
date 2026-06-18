@@ -224,6 +224,7 @@ class _ErrorBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         width: double.infinity,
+        constraints: const BoxConstraints(maxHeight: 120),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.red.withOpacity(0.08),
@@ -231,13 +232,19 @@ class _ErrorBanner extends StatelessWidget {
           border: Border.all(color: AppColors.red.withOpacity(0.25)),
         ),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Icon(Icons.error_outline_rounded, size: 16, color: AppColors.red),
+            const Padding(
+              padding: EdgeInsets.only(top: 2),
+              child: Icon(Icons.error_outline_rounded, size: 16, color: AppColors.red),
+            ),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                message,
-                style: AppText.sans(size: 13, color: AppColors.red),
+              child: SingleChildScrollView(
+                child: Text(
+                  message,
+                  style: AppText.sans(size: 13, color: AppColors.red),
+                ),
               ),
             ),
           ],
