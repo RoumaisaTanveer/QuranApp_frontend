@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import '../theme.dart';
 import '../services/api_service.dart';
 import '../widgets/widgets.dart';
+import '../widgets/rotating_ayah_footer.dart';
 import 'profile_screen.dart';
 import 'results_screen.dart';
 
@@ -311,34 +312,9 @@ class _JournalScreenState extends State<JournalScreen> {
 
                   const SizedBox(height: 40),
 
-                  // Quran verse footer
-                  Center(
-                    child: Column(children: [
-                      Text(
-                        'أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ',
-                        textDirection: TextDirection.rtl,
-                        textAlign: TextAlign.center,
-                        style: AppText.arabic(
-                            size: 16, color: AppColors.goldLight),
-                      ),
-                      const SizedBox(height: 6),
-                      Text(
-                        'Verily, in the remembrance of Allah do hearts find rest.',
-                        textAlign: TextAlign.center,
-                        style: AppText.sans(
-                            size: 11,
-                            color: AppColors.textMuted,
-                            italic: true),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Ar-Ra\'d 13:28',
-                        style: AppText.label(
-                            size: 9,
-                            color: AppColors.textMuted,
-                            spacing: 0.5),
-                      ),
-                    ]),
+                  // Quran verse footer (rotates every 8s)
+                  const Center(
+                    child: RotatingAyahFooter(),
                   ).animate().fadeIn(delay: 500.ms),
                 ],
               ),

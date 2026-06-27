@@ -16,6 +16,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   AuthUser? _user;
   bool _loading = true;
+  bool _savingName = false;
   String _error = '';
 
   @override
@@ -51,6 +52,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return '${dt.day} ${m[dt.month - 1]} ${dt.year}';
     } catch (_) {
       return iso;
+    }
+  }
+
+  Future<void> _editDisplayName() async {
+    final controller = TextEditingController(text: _user?.displayName ?? '');
+    final saved = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppColors.card,
+        title: Text('Edit display name', style: AppText.sans(color: AppColors.text)),
+        content: TextField(
+          controller: controller,
+          autofocus: true,
+          maxLength: 100,
+          style: AppText.sans(color: AppColors.text),
+          decoration: InputDecoration(
+            hintText: 'Your name',
+            hintStyle: AppText.sans(color: AppColors.textMuted),
+            counterStyle: AppText.sans(size: 11, color: AppColors.textDim),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text('Cancel', style: AppText.sans(color: AppColors.textDim)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: Text('Save', style: AppText.sans(color: AppColors.purpleLight)),
+          ),
+        ],
+      ),
+    );
+
+    if (saved != true || !mounted) return;
+
+    final name = controller.text.trim();
+    if (name.isEmpty) return;
+
+    setState(() => _savingName = true);
+    try {
+      final updated = await AuthService.instance.updateDisplayName(name);
+      if (mounted) setState(() => _user = updated);
+    } on AuthException catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.message)),
+        );
+      }
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Could not save name. Is the backend running?')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _savingName = false);
     }
   }
 
@@ -146,6 +204,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               value: _user?.displayName?.isNotEmpty == true
                                   ? _user!.displayName!
                                   : 'Not set',
+                              onEdit: _savingName ? null : _editDisplayName,
                             ),
                             const SizedBox(height: 14),
                             _InfoRow(
@@ -203,11 +262,13 @@ class _InfoRow extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
+  final VoidCallback? onEdit;
 
   const _InfoRow({
     required this.icon,
     required this.label,
     required this.value,
+    this.onEdit,
   });
 
   @override
@@ -233,6 +294,12 @@ class _InfoRow extends StatelessWidget {
               ],
             ),
           ),
+          if (onEdit != null)
+            IconButton(
+              onPressed: onEdit,
+              icon: const Icon(Icons.edit_outlined, size: 18, color: AppColors.textDim),
+              tooltip: 'Edit',
+            ),
         ],
       );
 }

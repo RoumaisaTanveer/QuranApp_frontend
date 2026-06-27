@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 import '../services/auth_service.dart';
+import '../widgets/rotating_ayah_footer.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'login_screen.dart';
 import 'main_shell.dart';
@@ -139,16 +140,11 @@ class _SplashContent extends StatelessWidget {
           ),
           Positioned(
             bottom: 48,
-            left: 0,
-            right: 0,
-            child: Text(
-              'أَلَا بِذِكْرِ ٱللَّهِ تَطْمَئِنُّ ٱلْقُلُوبُ',
-              textAlign: TextAlign.center,
-              textDirection: TextDirection.rtl,
-              style: AppText.arabic(
-                size: 14,
-                color: AppColors.textMuted,
-              ),
+            left: 24,
+            right: 24,
+            child: const RotatingAyahFooter(
+              arabicSize: 14,
+              englishSize: 10,
             ).animate().fadeIn(delay: 900.ms, duration: 800.ms),
           ),
         ],

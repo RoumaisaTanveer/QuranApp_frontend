@@ -60,7 +60,7 @@ class AuthService {
   String? _cachedToken;
 
   /// Platform-specific GoogleSignIn:
-  /// - Web:     clientId = web client
+  /// - Web:     clientId only (serverClientId NOT supported on web plugin)
   /// - Android: serverClientId = web client (yields id_token aud = web client)
   /// - iOS:     clientId = iOS client, serverClientId = web client
   static GoogleSignIn _createGoogleSignIn() {
@@ -151,10 +151,18 @@ class AuthService {
     }
 
     final idToken = googleAuth.idToken;
-    if (idToken == null) {
+    final accessToken = googleAuth.accessToken;
+
+    final Map<String, String> body;
+    if (idToken != null) {
+      body = {'id_token': idToken};
+    } else if (kIsWeb && accessToken != null) {
+      // Flutter web signIn() returns access_token, not id_token (GIS SDK limitation)
+      body = {'access_token': accessToken};
+    } else {
       throw AuthException(
-        'No Google ID token on web. Ensure GOOGLE_WEB_CLIENT_ID is set and '
-        'People API is enabled in Google Cloud.',
+        'No Google token received. Enable People API in Google Cloud, '
+        'then full-restart the app and try again.',
       );
     }
 
@@ -164,7 +172,7 @@ class AuthService {
           .post(
             Uri.parse('${ApiService.baseUrl}/auth/google'),
             headers: {'Content-Type': 'application/json'},
-            body: jsonEncode({'id_token': idToken}),
+            body: jsonEncode(body),
           )
           .timeout(ApiService.timeout);
     } catch (e) {
@@ -213,6 +221,35 @@ class AuthService {
     }
     if (res.statusCode != 200) {
       throw AuthException('Could not load profile (${res.statusCode})');
+    }
+    return AuthUser.fromJson(
+      jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>,
+    );
+  }
+
+  Future<AuthUser> updateDisplayName(String displayName) async {
+    final name = displayName.trim();
+    if (name.isEmpty) {
+      throw const AuthException('Display name cannot be empty.');
+    }
+
+    final res = await http
+        .patch(
+          Uri.parse('${ApiService.baseUrl}/auth/me'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${await getToken()}',
+          },
+          body: jsonEncode({'display_name': name}),
+        )
+        .timeout(ApiService.timeout);
+
+    if (res.statusCode == 401) {
+      await handleUnauthorized();
+      throw const UnauthorizedException();
+    }
+    if (res.statusCode != 200) {
+      throw AuthException('Could not update name (${res.statusCode})');
     }
     return AuthUser.fromJson(
       jsonDecode(utf8.decode(res.bodyBytes)) as Map<String, dynamic>,
