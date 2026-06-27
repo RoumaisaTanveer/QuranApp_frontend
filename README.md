@@ -72,7 +72,7 @@ static const String baseUrl = 'https://your-api.yourdomain.com';
 
 ## 5. Run the app
 
-### Web (easiest to test)
+### Web (easiest for testing)
 ```bash
 flutter run -d chrome
 ```
