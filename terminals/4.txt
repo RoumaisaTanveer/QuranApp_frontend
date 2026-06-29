@@ -1,0 +1,22 @@
+---
+pid: 3736
+cwd: "D:\quran_journal_frontend"
+command: "cd \"D:\\quran_journal_frontend\"; python tools\\generate_app_icon.py; dart run flutter_launcher_icons"
+started_at: 2026-06-29T11:45:38.067Z
+running_for_ms: 155008   
+---
+Wrote D:\quran_journal_frontend\assets\icon\app_icon.png
+Wrote D:\quran_journal_frontend\assets\icon\app_icon_foreground.png
+  ════════════════════════════════════════════
+     FLUTTER LAUNCHER ICONS (v0.14.4)                               
+  ════════════════════════════════════════════
+  
+• Creating default icons Android
+• Creating adaptive icons Android
+• Overwriting the default Android launcher icon with a new icon
+• Updating colors.xml with color for adaptive icon background
+• Creating mipmap xml file Android
+• Overwriting default iOS launcher icon with new icon
+Creating Icons for Web...
+
+✓ Successfully generated launcher icons

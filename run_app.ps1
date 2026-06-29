@@ -14,6 +14,9 @@ $Root = $PSScriptRoot
 & (Join-Path $Root "sync_config.ps1")
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $Root "tools\ensure_icons.ps1")
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 $configPath = Join-Path $Root "app_config.properties"
 $config = @{}
 Get-Content $configPath -Encoding UTF8 | ForEach-Object {

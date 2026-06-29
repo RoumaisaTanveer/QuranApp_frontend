@@ -24,7 +24,7 @@ Get-Content $configPath -Encoding UTF8 | ForEach-Object {
 $webClientId = $config["GOOGLE_WEB_CLIENT_ID"]
 $apiAndroid = $config["API_BASE_URL"]
 $apiWeb = $config["API_BASE_URL_WEB"]
-if (-not $apiWeb) { $apiWeb = "http://localhost:8000" }
+if (-not $apiWeb) { $apiWeb = $apiAndroid }
 $webPort = $config["WEB_PORT"]
 if (-not $webPort) { $webPort = "8080" }
 
@@ -57,6 +57,9 @@ if (Test-Path $indexPath) {
     $utf8 = New-Object System.Text.UTF8Encoding $false
     [System.IO.File]::WriteAllText($indexPath, $html, $utf8)
 }
+
+& (Join-Path $Root "tools\ensure_icons.ps1")
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host "Synced dart_defines.web.json (API: $apiWeb)" -ForegroundColor Green
 Write-Host "Synced dart_defines.android.json (API: $apiAndroid)" -ForegroundColor Green

@@ -13,7 +13,7 @@ class RotatingAyahFooter extends StatefulWidget {
     super.key,
     this.arabicSize = 16,
     this.englishSize = 11,
-    this.interval = const Duration(seconds: 8),
+    this.interval = const Duration(seconds: 45),
   });
 
   @override

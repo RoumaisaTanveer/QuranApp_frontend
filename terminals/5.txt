@@ -1,0 +1,8 @@
+---
+pid: 12924
+cwd: "D:\quran_journal_frontend"
+command: "cd \"D:\\quran_journal_frontend\"; powershell -File tools\\ensure_icons.ps1; flutter build apk --release --dart-define=API_BASE_URL=https://ahma12-quran-journal-api.hf.space --dart-define=GOOGLE_WEB_CLIENT_ID=998396667150-iie1o8gd8u1g235b9910v4a94gai7hmp.apps.googleusercontent.com"
+started_at: 2026-06-29T11:48:09.420Z
+running_for_ms: 4958     
+---
+Running Gradle task 'assembleRelease'...                        

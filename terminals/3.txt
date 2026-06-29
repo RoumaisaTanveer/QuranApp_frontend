@@ -1,0 +1,11 @@
+---
+pid: 20484
+cwd: "D:\quran_journal_frontend"
+command: "cd \"D:\\quran_journal_frontend\"; flutter build apk --dart-define=API_BASE_URL=https://ahma12-quran-journal-api.hf.space --dart-define=GOOGLE_WEB_CLIENT_ID=998396667150-iie1o8gd8u1g235b9910v4a94gai7hmp.apps.googleusercontent.com"
+started_at: 2026-06-29T11:07:08.468Z
+running_for_ms: 235002   
+---
+Running Gradle task 'assembleRelease'...                        
+Font asset "MaterialIcons-Regular.otf" was tree-shaken, reducing it from 1645184 to 5920 bytes (99.6% reduction). Tree-shaking can be disabled by providing the --no-tree-shake-icons flag when building your app.
+Running Gradle task 'assembleRelease'...                          232.5s
+√ Built build\app\outputs\flutter-apk\app-release.apk (48.7MB)

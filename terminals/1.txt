@@ -1,0 +1,10 @@
+---
+pid: 9284
+cwd: "D:\quran_journal_frontend"
+command: "pip install Pillow -q"
+started_at: 2026-06-29T11:01:38.587Z
+running_for_ms: 564991   
+---
+
+[notice] A new release of pip is available: 24.0 -> 26.1.2
+[notice] To update, run: python.exe -m pip install --upgrade pip

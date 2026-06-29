@@ -9,7 +9,7 @@ class ApiService {
   // In prod: set to your deployed backend URL
   static const String baseUrl = String.fromEnvironment(
     'API_BASE_URL',
-    defaultValue: 'http://10.0.2.2:8000', // Android emulator → host machine
+    defaultValue: 'https://ahma12-quran-journal-api.hf.space', // Android emulator → host machine
   );
 
   static const timeout = Duration(seconds: 60);
