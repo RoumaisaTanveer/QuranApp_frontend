@@ -1,0 +1,52 @@
+---
+pid: 20816
+cwd: "D:\quran_journal_frontend"
+command: "cd \"D:\\quran_journal_frontend\"; python tools\\generate_app_icon.py; dart run flutter_launcher_icons; dart run flutter_native_splash:create"
+started_at: 2026-06-29T16:44:51.240Z
+running_for_ms: 490005   
+---
+Reference: D:\quran_journal_frontend\icon.jpeg
+Wrote D:\quran_journal_frontend\assets\icon\app_icon.png
+Wrote D:\quran_journal_frontend\assets\icon\app_icon_foreground.png
+  ════════════════════════════════════════════
+     FLUTTER LAUNCHER ICONS (v0.14.4)                               
+  ════════════════════════════════════════════
+  
+• Creating default icons Android
+• Creating adaptive icons Android
+• Overwriting the default Android launcher icon with a new icon
+• Updating colors.xml with color for adaptive icon background
+• Creating mipmap xml file Android
+• Overwriting default iOS launcher icon with new icon
+Creating Icons for Web...
+
+✓ Successfully generated launcher icons
+[Android] Creating default splash images
+[Android] Creating dark mode splash images
+[Android] Updating launch background(s) with splash image path...
+[Android]  - android/app/src/main/res/drawable/launch_background.xml
+[Android]  - android/app/src/main/res/drawable-night/launch_background.xml
+[Android]  - android/app/src/main/res/drawable-v21/launch_background.xml
+[Android]  - android/app/src/main/res/drawable-night-v21/launch_background.xml
+[Android] Updating styles...
+[Android]  - android/app/src/main/res/values-v31/styles.xml
+[Android] No android/app/src/main/res/values-v31/styles.xml found in your Android project
+[Android] Creating android/app/src/main/res/values-v31/styles.xml and adding it to your Android project
+[Android]  - android/app/src/main/res/values-night-v31/styles.xml
+[Android] No android/app/src/main/res/values-night-v31/styles.xml found in your Android project
+[Android] Creating android/app/src/main/res/values-night-v31/styles.xml and adding it to your Android project
+[Android]  - android/app/src/main/res/values/styles.xml
+[Android]  - android/app/src/main/res/values-night/styles.xml
+[iOS] Creating  images
+[iOS] Creating dark mode  images
+[iOS] Updating ios/Runner/Info.plist for status bar hidden/visible
+[Web] Creating images
+[Web] Creating images
+[Web] Creating background images
+[Web] Creating CSS
+[Web] Updating index.html
+
+✅ Native splash complete.
+Now go finish building something awesome! 💪 You rock! 🤘🤩
+Like the package? Please give it a 👍 here: https://pub.dev/packages/flutter_native_splash
+

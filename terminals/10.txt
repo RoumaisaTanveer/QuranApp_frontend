@@ -1,0 +1,18 @@
+---
+pid: 14056
+cwd: "D:\quran_journal_frontend"
+command: "cd \"D:\\quran_journal_frontend\"; flutter run -d chrome --web-port=8080"
+started_at: 2026-06-29T16:50:26.119Z
+running_for_ms: 170000   
+---
+Launching lib\main.dart on Chrome in debug mode...
+Waiting for connection from debug service on Chrome...             30.8s
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
