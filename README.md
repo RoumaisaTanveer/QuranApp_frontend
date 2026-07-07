@@ -3,7 +3,13 @@
 **Uns** means familiarity, comfort, closeness — the ease you feel with something you're deeply connected to. This app brings that same closeness to the Quran: journal your thoughts and feelings, and Uns surfaces ayaat that speak to where you actually are, not just keyword matches.
 
 ## 🎥 Demo Video
-[Add your demo link here]
+
+
+
+
+https://github.com/user-attachments/assets/18b65e41-3455-41ca-bc52-de1485cd0c36
+
+
 
 ---
 
