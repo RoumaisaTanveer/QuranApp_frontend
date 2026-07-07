@@ -14,7 +14,7 @@ if (appConfigFile.exists()) {
 }
 
 val androidAppId = appConfig.getProperty("ANDROID_APP_ID", "com.quranjournal.quran_journal")
-val appDisplayName = appConfig.getProperty("APP_DISPLAY_NAME", "Quran Journal")
+val appDisplayName = appConfig.getProperty("APP_DISPLAY_NAME", "Uns")
 val googleWebClientId = appConfig.getProperty("GOOGLE_WEB_CLIENT_ID", "")
 
 android {

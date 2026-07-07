@@ -122,20 +122,11 @@ class _JournalScreenState extends State<JournalScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'انس',
+                            'أُنْسٌ مَعَ الْقُرْآن',
                             textDirection: TextDirection.rtl,
                             style: AppText.arabic(
-                              size: 22,
+                              size: 20,
                               color: AppColors.goldLight,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'مع القرآن',
-                            textDirection: TextDirection.rtl,
-                            style: AppText.arabic(
-                              size: 11,
-                              color: AppColors.textMuted,
                             ),
                           ),
                         ],

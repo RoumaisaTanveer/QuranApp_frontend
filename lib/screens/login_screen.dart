@@ -69,21 +69,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   const Spacer(flex: 2),
                   Text(
-                    'انس',
+                    'أُنْسٌ مَعَ الْقُرْآن',
                     textAlign: TextAlign.center,
                     textDirection: TextDirection.rtl,
-                    style: AppText.arabic(size: 42, color: AppColors.goldLight),
+                    style: AppText.arabic(size: 36, color: AppColors.goldLight),
                   ).animate().fadeIn(duration: 500.ms),
-                  const SizedBox(height: 8),
-                  Text(
-                    'مع القرآن',
-                    textAlign: TextAlign.center,
-                    textDirection: TextDirection.rtl,
-                    style: AppText.arabic(size: 18, color: AppColors.textSub),
-                  ).animate().fadeIn(delay: 100.ms),
                   const SizedBox(height: 12),
                   Text(
-                    'Your personal Quranic journal',
+                    'Comfort with the Qur\'an',
                     textAlign: TextAlign.center,
                     style: AppText.sans(
                       size: 13,

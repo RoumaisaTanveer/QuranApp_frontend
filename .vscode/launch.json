@@ -2,7 +2,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Quran Journal (Chrome)",
+      "name": "Uns (Chrome)",
       "request": "launch",
       "type": "dart",
       "deviceId": "chrome",
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "name": "Quran Journal (Android)",
+      "name": "Uns (Android)",
       "request": "launch",
       "type": "dart",
       "preLaunchTask": "sync-config",
