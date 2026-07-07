@@ -78,29 +78,10 @@ class _SplashContent extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: 90,
-                  height: 90,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: const LinearGradient(
-                      colors: [AppColors.purple, Color(0xFF5B3CC4)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.purpleGlow,
-                        blurRadius: 40,
-                        spreadRadius: 5,
-                      ),
-                    ],
-                  ),
-                  child: const Icon(
-                    Icons.menu_book_rounded,
-                    color: Colors.white,
-                    size: 38,
-                  ),
+                Image.asset(
+                  'assets/icon/app_icon_foreground.png',
+                  width: 160,
+                  height: 160,
                 )
                     .animate()
                     .scale(
@@ -112,25 +93,28 @@ class _SplashContent extends StatelessWidget {
                     .fadeIn(duration: 400.ms),
                 const SizedBox(height: 32),
                 Text(
-                  'مع القرآن',
+                  'انس',
                   textDirection: TextDirection.rtl,
                   style: AppText.arabic(
-                    size: 38,
+                    size: 44,
                     color: AppColors.goldLight,
                   ),
                 )
                     .animate()
                     .fadeIn(delay: 500.ms, duration: 600.ms)
                     .slideY(begin: 0.2, end: 0, delay: 500.ms, duration: 600.ms),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Text(
-                  'With the Quran',
-                  style: AppText.sans(
-                    size: 14,
+                  'مع القرآن',
+                  textDirection: TextDirection.rtl,
+                  style: AppText.arabic(
+                    size: 20,
                     color: AppColors.textSub,
-                    weight: FontWeight.w300,
                   ),
-                ).animate().fadeIn(delay: 700.ms, duration: 600.ms),
+                )
+                    .animate()
+                    .fadeIn(delay: 700.ms, duration: 600.ms)
+                    .slideY(begin: 0.2, end: 0, delay: 700.ms, duration: 600.ms),
                 const SizedBox(height: 60),
                 _PulseDots()
                     .animate()

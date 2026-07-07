@@ -35,10 +35,13 @@ flutter:
           weight: 700
   assets:
     - assets/fonts/
+    - assets/icon/
 
 flutter_native_splash:
   color: "#17171E"
   color_dark: "#17171E"
+  image: assets/icon/app_icon_foreground.png
+  image_dark: assets/icon/app_icon_foreground.png
   web: true
   android: true
   ios: true

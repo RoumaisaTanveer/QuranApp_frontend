@@ -122,7 +122,7 @@ class _JournalScreenState extends State<JournalScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'مع القرآن',
+                            'انس',
                             textDirection: TextDirection.rtl,
                             style: AppText.arabic(
                               size: 22,
@@ -131,8 +131,9 @@ class _JournalScreenState extends State<JournalScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'With the Quran',
-                            style: AppText.sans(
+                            'مع القرآن',
+                            textDirection: TextDirection.rtl,
+                            style: AppText.arabic(
                               size: 11,
                               color: AppColors.textMuted,
                             ),
